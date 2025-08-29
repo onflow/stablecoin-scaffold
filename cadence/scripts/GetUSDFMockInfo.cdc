@@ -1,9 +1,7 @@
-import "USDF_MOCK"
+import "EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed"
+import "FungibleTokenMetadataViews"
 
-/// This script returns information about the USDF_MOCK token.
-///
-/// @return A struct containing token information
-///
+/// This script returns information about the USDF token.
 access(all) struct TokenInfo {
     access(all) let name: String
     access(all) let symbol: String
@@ -19,10 +17,14 @@ access(all) struct TokenInfo {
 }
 
 access(all) fun main(): TokenInfo {
+    // The mainnet contract may not have all the same methods as our mock
+    // Try to get basic info that should be available on both contracts
+    let ftView = EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.resolveContractView(resourceType: nil, viewType: Type<FungibleTokenMetadataViews.FTDisplay>()) as! FungibleTokenMetadataViews.FTDisplay?
+    
     return TokenInfo(
-        name: USDF_MOCK.getName(),
-        symbol: USDF_MOCK.getSymbol(),
-        decimals: USDF_MOCK.getDecimals(),
-        totalSupply: USDF_MOCK.totalSupply
+        name: ftView?.name ?? "USDF",
+        symbol: ftView?.symbol ?? "USDF", 
+        decimals: 6, // USDF has 6 decimals
+        totalSupply: EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply
     )
 }

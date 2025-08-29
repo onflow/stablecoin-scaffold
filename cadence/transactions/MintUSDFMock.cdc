@@ -1,12 +1,9 @@
 import "FungibleToken"
-import "USDF_MOCK"
+import "EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed"
 
-/// This transaction mints USDF_MOCK tokens and deposits them into the recipient's vault.
+/// This transaction mints USDF tokens and deposits them into the recipient's vault.
+/// Works with USDF_MOCK on emulator (public mint) and EVMVMBridgedToken on mainnet (requires admin).
 /// If the recipient doesn't have a vault set up, the transaction will create one for them.
-///
-/// @param amount: The amount of tokens to mint (limited to 1000.0 per transaction for testing)
-/// @param recipient: The address to receive the minted tokens
-///
 transaction(amount: UFix64, recipient: Address) {
 
     let recipientVault: &{FungibleToken.Receiver}
@@ -18,17 +15,17 @@ transaction(amount: UFix64, recipient: Address) {
 
         // Check if recipient has a vault capability
         self.recipientVault = recipientAccount.capabilities.borrow<&{FungibleToken.Receiver}>(
-            USDF_MOCK.ReceiverPublicPath
+            /public/EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabedReceiver
         ) ?? panic("Could not borrow receiver reference to recipient's vault")
     }
 
     execute {
         // Mint the requested amount of tokens
-        let mintedVault <- USDF_MOCK.mintTokens(amount: amount)
+        let mintedVault <- EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.mintTokens(amount: amount)
 
         // Deposit the newly minted tokens into the recipient's vault
         self.recipientVault.deposit(from: <-mintedVault)
 
-        log("Successfully minted ".concat(amount.toString()).concat(" USDF_MOCK tokens to ").concat(recipient.toString()))
+        log("Successfully minted ".concat(amount.toString()).concat(" USDF tokens to ").concat(recipient.toString()))
     }
 }

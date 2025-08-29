@@ -10,7 +10,7 @@ import "ViewResolver"
 /// This contract includes a public mint function so users can mint tokens for
 /// testing without needing a faucet.
 ///
-access(all) contract USDF_MOCK: FungibleToken {
+access(all) contract EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed: FungibleToken {
     /// Total supply of tokens in existence
     access(all) var totalSupply: UFix64
 
@@ -43,7 +43,7 @@ access(all) contract USDF_MOCK: FungibleToken {
 
         /// getSupportedVaultTypes returns a list of vault types that this receiver accepts
         access(all) view fun getSupportedVaultTypes(): {Type: Bool} {
-            return {Type<@USDF_MOCK.Vault>(): true}
+            return {Type<@EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.Vault>(): true}
         }
 
         access(all) view fun isSupportedVaultType(type: Type): Bool {
@@ -57,17 +57,17 @@ access(all) contract USDF_MOCK: FungibleToken {
         
         /// Gets the token name - for interface compatibility with original contract
         access(all) view fun getName(): String {
-            return USDF_MOCK.name
+            return EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.name
         }
 
         /// Gets the token symbol - for interface compatibility with original contract
         access(all) view fun getSymbol(): String {
-            return USDF_MOCK.symbol
+            return EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.symbol
         }
 
         /// Gets the token decimals - for interface compatibility with original contract
         access(all) view fun getDecimals(): UInt8 {
-            return USDF_MOCK.decimals
+            return EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.decimals
         }
 
         /// Returns the mock EVM contract address - for interface compatibility with original contract
@@ -85,7 +85,7 @@ access(all) contract USDF_MOCK: FungibleToken {
 
         /// deposit takes a vault and adds its balance to the balance of this vault
         access(all) fun deposit(from: @{FungibleToken.Vault}) {
-            let vault <- from as! @USDF_MOCK.Vault
+            let vault <- from as! @EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
             vault.balance = 0.0
@@ -98,17 +98,17 @@ access(all) contract USDF_MOCK: FungibleToken {
         }
 
         access(all) view fun getViews(): [Type] {
-            return USDF_MOCK.getContractViews(resourceType: nil)
+            return EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.getContractViews(resourceType: nil)
         }
 
         access(all) fun resolveView(_ view: Type): AnyStruct? {
-            return USDF_MOCK.resolveContractView(resourceType: nil, viewType: view)
+            return EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.resolveContractView(resourceType: nil, viewType: view)
         }
 
         /// Called when a fungible token is burned via the `Burner.burn()` method
         access(contract) fun burnCallback() {
             if self.balance > 0.0 {
-                USDF_MOCK.totalSupply = USDF_MOCK.totalSupply - self.balance
+                EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply = EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply - self.balance
                 emit TokensBurned(amount: self.balance, from: self.owner?.address)
             }
             self.balance = 0.0
@@ -128,7 +128,7 @@ access(all) contract USDF_MOCK: FungibleToken {
             pre {
                 amount > 0.0: "Amount minted must be greater than zero"
             }
-            USDF_MOCK.totalSupply = USDF_MOCK.totalSupply + amount
+            EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply = EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply + amount
             return <-create Vault(balance: amount)
         }
     }
@@ -139,7 +139,7 @@ access(all) contract USDF_MOCK: FungibleToken {
             amount > 0.0: "Amount minted must be greater than zero"
             amount <= 1000.0: "Cannot mint more than 1000 tokens at once (for testing)"
         }
-        USDF_MOCK.totalSupply = USDF_MOCK.totalSupply + amount
+        EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply = EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.totalSupply + amount
         emit TokensMinted(amount: amount, to: nil)
         return <-create Vault(balance: amount)
     }
@@ -204,10 +204,10 @@ access(all) contract USDF_MOCK: FungibleToken {
                     storagePath: self.VaultStoragePath,
                     receiverPath: self.ReceiverPublicPath,
                     metadataPath: self.VaultPublicPath,
-                    receiverLinkedType: Type<&USDF_MOCK.Vault>(),
-                    metadataLinkedType: Type<&USDF_MOCK.Vault>(),
+                    receiverLinkedType: Type<&EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.Vault>(),
+                    metadataLinkedType: Type<&EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.Vault>(),
                     createEmptyVaultFunction: (fun(): @{FungibleToken.Vault} {
-                        return <-USDF_MOCK.createEmptyVault(vaultType: Type<@USDF_MOCK.Vault>())
+                        return <-EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.createEmptyVault(vaultType: Type<@EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.Vault>())
                     })
                 )
             case Type<FungibleTokenMetadataViews.TotalSupply>():
@@ -241,7 +241,7 @@ access(all) contract USDF_MOCK: FungibleToken {
         self.account.storage.save(<-vault, to: self.VaultStoragePath)
 
         // Create a public capability for the vault
-        let vaultCap = self.account.capabilities.storage.issue<&USDF_MOCK.Vault>(self.VaultStoragePath)
+        let vaultCap = self.account.capabilities.storage.issue<&EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.Vault>(self.VaultStoragePath)
         self.account.capabilities.publish(vaultCap, at: self.VaultPublicPath)
 
         let receiverCap = self.account.capabilities.storage.issue<&{FungibleToken.Receiver}>(self.VaultStoragePath)
