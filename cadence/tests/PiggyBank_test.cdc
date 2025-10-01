@@ -23,69 +23,62 @@ access(all) fun setup() {
     Test.expect(err, Test.beNil())
 }
 
-access(all) fun testCreatePiggyBank() {
-    // Create a piggy bank
-    let piggyBank <- PiggyBank.createPiggyBank()
-
+access(all) fun testInitialBalance() {
     // Check initial balance is 0
-    Test.assertEqual(0.0, piggyBank.getBalance())
-
-    destroy piggyBank
+    Test.assertEqual(0.0, PiggyBank.getBalance())
 }
 
 access(all) fun testDepositAndWithdraw() {
-    // Create a piggy bank
-    let piggyBank <- PiggyBank.createPiggyBank()
-
     // Mint some USDF tokens for testing
     let tokens <- EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.mintTokens(amount: 100.0)
 
-    // Deposit tokens into piggy bank
-    piggyBank.deposit(from: <-tokens)
+    // Deposit tokens into piggy bank contract
+    PiggyBank.deposit(from: <-tokens)
 
     // Check balance after deposit
-    Test.assertEqual(100.0, piggyBank.getBalance())
+    Test.assertEqual(100.0, PiggyBank.getBalance())
 
     // Withdraw half
-    let withdrawn <- piggyBank.withdraw(amount: 50.0)
+    let withdrawn <- PiggyBank.withdraw(amount: 50.0)
 
     // Check balance after withdrawal
-    Test.assertEqual(50.0, piggyBank.getBalance())
+    Test.assertEqual(50.0, PiggyBank.getBalance())
     Test.assertEqual(50.0, withdrawn.balance)
 
     destroy withdrawn
-    destroy piggyBank
 }
 
 access(all) fun testInsufficientBalance() {
-    // Create a piggy bank
-    let piggyBank <- PiggyBank.createPiggyBank()
+    // Reset to known state by withdrawing all
+    let currentBalance = PiggyBank.getBalance()
+    if currentBalance > 0.0 {
+        let tokens <- PiggyBank.withdraw(amount: currentBalance)
+        destroy tokens
+    }
 
-    // Mint some USDF tokens
+    // Mint and deposit some USDF tokens
     let tokens <- EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.mintTokens(amount: 50.0)
-
-    // Deposit tokens
-    piggyBank.deposit(from: <-tokens)
+    PiggyBank.deposit(from: <-tokens)
 
     // Try to withdraw more than available - this should panic
     // Note: In a real test, you'd want to use Test.expectFailure or similar
-
-    destroy piggyBank
 }
 
 access(all) fun testMultipleDeposits() {
-    // Create a piggy bank
-    let piggyBank <- PiggyBank.createPiggyBank()
+    // Reset to zero balance
+    let currentBalance = PiggyBank.getBalance()
+    if currentBalance > 0.0 {
+        let tokens <- PiggyBank.withdraw(amount: currentBalance)
+        destroy tokens
+    }
 
     // Make multiple deposits
     let tokens1 <- EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.mintTokens(amount: 25.0)
-    piggyBank.deposit(from: <-tokens1)
+    PiggyBank.deposit(from: <-tokens1)
 
     let tokens2 <- EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed.mintTokens(amount: 75.0)
-    piggyBank.deposit(from: <-tokens2)
+    PiggyBank.deposit(from: <-tokens2)
 
     // Check total balance
-    Test.assertEqual(100.0, piggyBank.getBalance())
-
-    destroy piggyBank
+    Test.assertEqual(100.0, PiggyBank.getBalance())
 }
