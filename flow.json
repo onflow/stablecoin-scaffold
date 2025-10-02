@@ -7,6 +7,12 @@
 				"mainnet": "1e4aa0b87d10b141",
 				"testing": "0000000000000007"
 			}
+		},
+		"PiggyBank": {
+			"source": "cadence/contracts/PiggyBank.cdc",
+			"aliases": {
+				"testing": "0000000000000007"
+			}
 		}
 	},
 	"dependencies": {
@@ -128,7 +134,8 @@
 	"deployments": {
 		"emulator": {
 			"emulator-account": [
-				"EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed"
+				"EVMVMBridgedToken_2aabea2058b5ac2d339b163c6ab6f2b6d53aabed",
+				"PiggyBank"
 			]
 		}
 	}
