@@ -12,6 +12,14 @@ This tutorial uses the USDF stablecoin contract deployed on mainnet (`1e4aa0b87d
 
 The contract aliases in `flow.json` ensure **the same scripts and transactions work seamlessly across all environments** without any code changes.
 
+## Prerequisites
+
+Before running this tutorial, you need to install the Flow CLI:
+
+- **Installation Guide**: https://developers.flow.com/build/tools/flow-cli
+
+The Flow CLI is required to run the emulator, deploy contracts, and execute transactions and scripts.
+
 ## Tutorial
 
 Follow these steps to run the complete PiggyBank tutorial:
