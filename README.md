@@ -1,6 +1,6 @@
-# USDF Stablecoin PiggyBank Tutorial
+# stablecoin-scaffold — USDF Stablecoin PiggyBank Tutorial for Flow
 
-This project demonstrates how to build a simple PiggyBank contract that works with the USDF stablecoin on Flow blockchain. USDF is a production stablecoin deployed on Flow Mainnet.
+This project demonstrates how to build a simple PiggyBank contract that works with the USDF stablecoin on the Flow network. USDF is a production stablecoin deployed on Flow Mainnet.
 
 ## Overview
 
@@ -30,7 +30,7 @@ Follow these steps to run the complete PiggyBank tutorial:
 flow emulator
 ```
 
-This starts a local Flow blockchain for development.
+This starts a local Flow network for development.
 
 ### 2. Deploy the Contracts
 
@@ -98,3 +98,11 @@ This checks the USDF balance in the user's vault. After the transactions above, 
 ## Next Steps
 
 Try modifying the amounts in the transactions or create your own transactions to interact with the PiggyBank contract!
+## About Flow
+
+This repo is part of the [Flow network](https://flow.com), a Layer 1 blockchain built for consumer applications, AI agents, and DeFi at scale.
+
+- Developer docs: https://developers.flow.com
+- Cadence language: https://cadence-lang.org
+- Community: [Flow Discord](https://discord.gg/flow) · [Flow Forum](https://forum.flow.com)
+- Governance: [Flow Improvement Proposals](https://github.com/onflow/flips)
