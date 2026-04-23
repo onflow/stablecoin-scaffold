@@ -98,6 +98,7 @@ This checks the USDF balance in the user's vault. After the transactions above, 
 ## Next Steps
 
 Try modifying the amounts in the transactions or create your own transactions to interact with the PiggyBank contract!
+
 ## About Flow
 
 This repo is part of the [Flow network](https://flow.com), a Layer 1 blockchain built for consumer applications, AI agents, and DeFi at scale.
